@@ -209,4 +209,45 @@ hash:{[input]
 hash ""
 hash D10
 
+D11
+p1
+m:`n`s`w`e`ne`nw`se`sw!((1 0);(-1 0);(0 -1);(0 1);(0.5 0.5);(0.5 -0.5);(-0.5 0.5);(-0.5 -0.5))
+sum m `ne`ne`s`s
+sum abs sum m `$"," vs "ne,ne,s,s"
+sum abs sum m `$"," vs D11
+
+p2
+max sum flip abs sums m `$"," vs D111
+
+D12
+p1 
+si:"0 <-> 2
+1 <-> 1
+2 <-> 0, 3, 4
+3 <-> 2, 4
+4 <-> 2, 3, 6
+5 <-> 6
+6 <-> 4, 5"
+rep:{([row:"J"$first x]col:"J"$"," vs' last[x])}
+t:ungroup rep trim flip "<->" vs/: "\n" vs si
+ms:{./[(1+max x)#0b;x:x[;`row`col];:;1b]}
+fAC:{[i;m]
+		n: where m[i]; /find neighbors
+	f:{distinct raze x,where each y x}[;m]; 
+	f over n}
+fAC[0;ms t]
+m:ms ungroup rep trim flip "<->" vs/: "\n" vs D12
+count fAC[0;m]
+
+p2
+allComponents:{[m]
+	points:til count m;
+	connected:();
+	while[count points;
+	i:first points;
+	connected,:enlist n:`s#n:distinct asc i,fAC[i;m]; /add point in case it is island
+	points:points except n];
+	connected}
+count allComponents m
+
 
