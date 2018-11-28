@@ -251,3 +251,12 @@ allComponents:{[m]
 count allComponents m
 
 
+
+
+
+
+
+D14
+find contigous
+f:('[;]/)(first;{(x[0]+count[y]-0^first 7h$(sum/)y{any x in y}/:\:x[1];y)}/[(0j;());];{(where 1<>-2-':w)_w:where x}')
+f a
