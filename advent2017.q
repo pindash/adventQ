@@ -327,6 +327,11 @@ hash:{[input]
 
 sum over 1h$raze 2 vs 7h$hash each "ffayrhll-",/: string til 128
 
+p2
+gni:{distinct raze (0|127&-1 0 0 1+/:y mod x)+x* 0|127&0 -1 1 0+/:y div x};
+f:{distinct (),x,k where 0^y k:gni[floor sqrt count y;x] except x};
+t:{[m;t;j]$[not j in raze exec neighbors from t;t upsert (j;f[;m] over j);t]}[n]/[([id:()]neighbors:());where n]
+
 
 p2
 find contigous
