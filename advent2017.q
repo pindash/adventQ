@@ -252,11 +252,83 @@ count allComponents m
 
 
 
+d13
+t:([]level:til 2+max t[`level]; range:0) lj 1!t
+t:update spos:0 mod range, me:0b, c:0 from t
+t:update realpos:map[range]@'spos from t
+t:update me:1b from t where i=0
+ pico:{
+   x:update c:range*level from x where me, 0=map[range]@'spos;
+   if[(max x[`level])=first where x[`me];:x];
+   x[`me]:-1 rotate x[`me];
+   x:update spos:(1+spos) mod max(0;-2+2*range) from x;
+	x} 
+select sum c from pico over t
 
+update spos:0 from `t
+select sum c from update c:level*range from t where 0=level mod 2*range-1
+
+p2
+pico:{[x;delay]
+   if[0<>delay; x:update c:1+range*level from x where me, 0=realpos];
+   if[(max x[`level])=first where x[`me];:x];
+   x[`me]:delay rotate x[`me];
+   x:update spos:(1+spos) mod max(0;-2+2*range)from x;
+   x:update realpos:map[range]@'spos from x;
+   x}
+   i:0
+ t
+ f:{sum exec c from update c:1 from t where 0=(x+level) mod 2*range-1} 
+ each til 100
+f each til 100
+
+{where exec 0=(level+x) mod 2*range-1 from t} 1
+
+select from t
+t[`range]
+
+ while[not {0=sum exec c from pico/[t;(x#0),count[t]#-1]} i;i+:1]
+
+
+first 10 _ 
+pico/[t;(#0),count[t]#-1]
+
+pico[t;-1]
+update c:1+range*level from t where me, 0=realpos
+siev:{$[x<4;enlist 2;r,1_where not any x#'not til each r:siev ceiling sqrt x]}
+
+distinct select level mod 2*range-1 from t
+
+
+1+first where 1<>deltas j where 0<j:distinct asc raze 
+
+p:{[l;r;i]neg[l]+(2*r-1)*til i}[;;4000000]
+j:distinct asc raze exec p'[level;range] from t
+1+ first where 1<>deltas 
+first where 1< deltas j
+j:j where -1<j
+
+
+j:{(til x),reverse -1_ 1_ til x} each (!) . flip "I"$":" vs/:"\n" vs d13
+max {$[0 in { j[x;(x+y) mod count j[x]]}\:[til 93;x];0;x]} each til 4000000
 
 
 
 D14
+p1
+hash:{[input]
+  finput:(7h$input),17, 31, 73, 47, 23;
+  l:til 256;
+  c:0;
+  finput:raze 64# enlist finput;
+  skip:til count finput;
+  res:first {[x;y;skip]l:first x;c:last x; l[a]:reverse l a:(c+til y) mod 256;c:(c+skip+count a) mod 256;(l;c)}/[(l;c);finput;skip];
+  4h$2 sv (<>/)flip 2 vs flip 16 16#res}
+
+sum over 1h$raze 2 vs 7h$hash each "ffayrhll-",/: string til 128
+
+
+p2
 find contigous
 f:('[;]/)(first;{(x[0]+count[y]-0^first 7h$(sum/)y{any x in y}/:\:x[1];y)}/[(0j;());];{(where 1<>-2-':w)_w:where x}')
 f a
