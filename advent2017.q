@@ -260,3 +260,10 @@ D14
 find contigous
 f:('[;]/)(first;{(x[0]+count[y]-0^first 7h$(sum/)y{any x in y}/:\:x[1];y)}/[(0j;());];{(where 1<>-2-':w)_w:where x}')
 f a
+
+t:([id:()]neighbors:())
+gni:{j where 0<=j:(raze -1 0 0 1+/:x mod 128)+128*raze 0 -1 1 0+/:x div 128}
+
+f:{((),x,k where 0^n k:(gni x) except x)} 
+
+{$[not x in raze exec neighbors from t;`t upsert $[n x;(x;f over x);()];`t]} each til count n
