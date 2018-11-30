@@ -333,6 +333,21 @@ f:{distinct (),x,k where 0^y k:gni[floor sqrt count y;x] except x};
 t:{[m;t;j]$[not j in raze exec neighbors from t;t upsert (j;f[;m] over j);t]}[n]/[([id:()]neighbors:());where n]
 
 
+
+nn:{[m] 
+	c:count m;m:raze m; runs:{(where 1<>-2-': value x) _ key x}; 
+	n:runs i!(i:where m) mod c;
+    n,:runs j!(j:(raze flip (c;c)#til c*c) inter i) div c;
+    t:ungroup `id xkey update id:i from ([]n);
+    f:{[t]d:exec min p by id from ungroup `p xkey select distinct id,p:min id by n from t;update id:d id from t};
+	f over t}
+nn2:{[m]
+	c:count m;m:raze m; t:([id:()]n:());
+	gni:{distinct raze (0|(x-1)&-1 0 0 1+/:y mod x)+x* 0|(x-1)&0 -1 1 0+/:y div x}[c];
+	f:{[gni;i;j](),i,k where j k:gni[i] except i}[gni;;m];
+	t:{[f;m;t;j]$[not j in raze exec n from t;t upsert (j;f over j);t]}[f;n]/[t;where m]
+	}
+
 p2
 find contigous
 f:('[;]/)(first;{(x[0]+count[y]-0^first 7h$(sum/)y{any x in y}/:\:x[1];y)}/[(0j;());];{(where 1<>-2-':w)_w:where x}')
