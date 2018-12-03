@@ -339,7 +339,7 @@ nn:{[m]
 	n:runs i!(i:where m) mod c;
     n,:runs j!(j:(raze flip (c;c)#til c*c) inter i) div c;
     t:ungroup `id xkey update id:i from ([]n);
-    f:{[t]d:exec min p by id from ungroup `p xkey select distinct id,p:min id by n from t;update id:d id from t};
+    f:{[t]update id:min p by id from update p:min id by n from t};
 	f over t}
 nn2:{[m]
 	c:count m;m:raze m; t:([id:()]n:());
