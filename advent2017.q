@@ -359,3 +359,35 @@ gni:{j where 0<=j:(raze -1 0 0 1+/:x mod 128)+128*raze 0 -1 1 0+/:x div 128}
 f:{((),x,k where 0^n k:(gni x) except x)} 
 
 {$[not x in raze exec neighbors from t;`t upsert $[n x;(x;f over x);()];`t]} each til count n
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------
+D3:input
+s:"\n"vs input 
+si:"\n" vs si
+r:{`id`cs`rs`w`h!raze ("J"$1_ first " " vs x;
+			"J"$first "," vs first 2_" " vs x;
+			"J"$-1 _ last "," vs first 2_" " vs x;
+			"J"$"x" vs first 3_" " vs x)}
+claims:r each s
+claims:update cs:cs-1,rs:rs-1 from claims
+f:{[m;d]m+.[;;:;1b]/[(1000 1000#0b);(cross/)(d[`rs];d[`cs])+(til d[`h];til d[`w])]}
+m:f/[(1000 1000#0b);claims]
+sum 1<raze m
+
+
+f:{[m;d]m+.[;;:;1b]/[(1000 1000#0b);(cross/)(d[`rs];d[`cs])+(til d[`h];til d[`w])]}
+m:f/[(1000 1000#0b);claims]
+sum 1<raze m
