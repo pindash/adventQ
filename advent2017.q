@@ -348,46 +348,42 @@ nn2:{[m]
 	t:{[f;m;t;j]$[not j in raze exec n from t;t upsert (j;f over j);t]}[f;n]/[t;where m]
 	}
 
-p2
-find contigous
-f:('[;]/)(first;{(x[0]+count[y]-0^first 7h$(sum/)y{any x in y}/:\:x[1];y)}/[(0j;());];{(where 1<>-2-':w)_w:where x}')
-f a
-
-t:([id:()]neighbors:())
-gni:{j where 0<=j:(raze -1 0 0 1+/:x mod 128)+128*raze 0 -1 1 0+/:x div 128}
-
-f:{((),x,k where 0^n k:(gni x) except x)} 
-
-{$[not x in raze exec neighbors from t;`t upsert $[n x;(x;f over x);()];`t]} each til count n
+/flood fill 2 dimensional
+ff2:{[m]
+	c:count m;m:raze m; t:([id:()]n:());
+	gni:{distinct raze (0|(x-1)&-1 0 0 1+/:y mod x)+x* 0|(x-1)&0 -1 1 0+/:y div x}[c];
+	f:{[gni;i;j](),i,k where j k:gni[i] except i}[gni;;m];
+	t:{[f;m;t;j]$[not j in raze exec n from t;t upsert (j;f over j);t]}[f;n]/[t;where m]
+	}
 
 
 
+/flood fill N dimensional case
+ffN:{[m]
+	c:count m;r:1; while[(count m:raze m)<>count[m];r+:1]; t:([id:()]n:());
+	gniN:{[r;c;n]a:neg[a],a:a where 1=sum each a:(cross/)(r;2)#01b;
+		distinct raze -1 _ flip c sv flip (c-1)&0|a +\: c vs n,-1+prd r#c}[r;c];
+	f:{[gni;i;j](),i,j inter gni[i] except i}[gniN;;where m];
+	ps:where m;
+	while[count ps;t:t upsert (first ps;k:f over first ps); ps:ps except k];
+	/functional version is slower
+	/t:{[f;t;j]q+::1;$[not j in raze exec n from t;t upsert (j;f over j);t]}[f]/[t;where m] 
+	t}
+/row run method 2 dimensional
+rr2:{[m] 
+    c:count m;m:raze m; runs:{(where 1<>-2-': y) _  x}; 
+    n:raze runs'[j;(j:i group (i:where m) div c) mod c]; /cover edge case where diagnals 
+    n,:raze runs'[j;(j:j group (j:(raze flip (c;c)#til c*c) inter i) mod c) div c];
+    t:ungroup `id xkey update id:i from ([]n);
+    f:{[t]update id:min p by id from update p:min id by n from t};
+	f over t}
 
-
-
-
-
-
-
-
-
-
-
----------------
-D3:input
-s:"\n"vs input 
-si:"\n" vs si
-r:{`id`cs`rs`w`h!raze ("J"$1_ first " " vs x;
-			"J"$first "," vs first 2_" " vs x;
-			"J"$-1 _ last "," vs first 2_" " vs x;
-			"J"$"x" vs first 3_" " vs x)}
-claims:r each s
-claims:update cs:cs-1,rs:rs-1 from claims
-f:{[m;d]m+.[;;:;1b]/[(1000 1000#0b);(cross/)(d[`rs];d[`cs])+(til d[`h];til d[`w])]}
-m:f/[(1000 1000#0b);claims]
-sum 1<raze m
-
-
-f:{[m;d]m+.[;;:;1b]/[(1000 1000#0b);(cross/)(d[`rs];d[`cs])+(til d[`h];til d[`w])]}
-m:f/[(1000 1000#0b);claims]
-sum 1<raze m
+/row run methond N dimensional
+rrN:{[m] 
+     c:count m;r:1; while[(count m:raze m)<>count[m];r+:1]; runs:{(where 1<>-2-': y) _ x};
+     j:(c sv (til r) rotate\: c vs til prd r#c) inter\: where m;
+     g:til[r] except/: d:reverse til r;
+     n:raze raze each runs''[j@'k;@'[v;d]@'k:('[group;flip]) each @'[v:flip c vs j;g]];
+    t:ungroup `id xkey update id:i from ([]n);
+    f:{[t]update id:min p by id from update p:min id by n from t};
+	f over t}
