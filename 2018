@@ -6,3 +6,34 @@ p:-100 + (cross/)til each 2#1000
 max d where d[0N] > d:count each group {k:sum abs c-x;$[1=count r:where k=min k;first r; 0N]} each p
 p2
 sum 10000> {sum over abs c-x} each p
+
+
+D7
+/used views to solve dependency resolution
+value each {x[1],"::{k,::x;1}[`","`" sv string x[1]"]"} each si[;5 36]
+
+k:()!();i:0;k[i]:enlist[`];j:()
+t:0!select asc distinct d by r from flip `d`r!flip d7[;5 36]
+value each {x[0],"::",(";" sv string x[1]),";{i+::1;k[i]:x; j,::y;1}[`",("`" sv string x[1]),";`",x[0],"]"} each flip value flip select r, d from t
+c:(asc `$string distinct (raze t[`d]) except t[`r]) set\: 1
+l:`$first t[`r] except raze t[`d]
+get l
+\v
+asc distinct raze d7[;5 36]
+
+raze string raze over (distinct c,k),l
+k[0]:c
+k
+count raze string exec distinct v from `l`v xasc ungroup 1!flip `l`v!(key;value)@\: (`,j),'k
+{(y;x)}'[`,j;k]
+tt:ungroup 1!t
+select from t where d in string c
+select from t where r="S"
+c
+"`","`" sv string "AB"
+
+s:ungroup 1!t upsert ("a";first each string c)
+done:enlist["a"]
+s:delete from s where d in done; done,:first first 
+exec d from s where r in done
+done
