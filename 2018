@@ -1,0 +1,8 @@
+
+D6
+c:flip "J"$ "," vs/: read0 `:d6.txt
+p1
+p:-100 + (cross/)til each 2#1000
+max d where d[0N] > d:count each group {k:sum abs c-x;$[1=count r:where k=min k;first r; 0N]} each p
+p2
+sum 10000> {sum over abs c-x} each p
