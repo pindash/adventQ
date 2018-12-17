@@ -1,3 +1,75 @@
+/Advent 2018 
+D1
+p1
+sum "I"$"\n" vs input
+p2 
+k:"I"$"\n" vs input
+j:k
+i:0
+while[(count sums k)~count distinct sums k;k,:j]
+k:neg[count j] _ k
+last h:{$[not first last[x] in -1 _ x;x,last[x]+y mod[count x;count y];x]}[;j]/[(sums k)]
+
+D2
+input:read0 `:d2.txt
+p1
+prd sum {any each (2 3)=\:count each group x} each input
+p2
+{x where x=y}. 2#raze raze x{$[1=sum x<>y;(x;y);()]}\:/: x:read0 `:d2.txt
+j where 1=.'[{sum x<>y}]j:0 26 _/:{raze(1+til c)_'(c;c:count[x])#x cross x} input
+{x where x=y}. x -1 0+?[sum differ each flip x:asc read0 `d2.txt;1]
+
+---------------
+D3:input
+s:read0 `:d3.txt
+p1
+r:{`id`cs`rs`w`h!raze ("J"$1_ first " " vs x;
+			"J"$first "," vs first 2_" " vs x;
+			"J"$-1 _ last "," vs first 2_" " vs x;
+			"J"$"x" vs first 3_" " vs x)}
+claims:r each s
+claims:update cs:cs-1,rs:rs-1 from claims
+f:{[m;d]m+.[;;:;1b]/[(1000 1000#0b);(cross/)(d[`rs];d[`cs])+(til d[`h];til d[`w])]}
+m:f/[(1000 1000#0b);claims]
+sum 1<raze m
+
+
+p2
+claims:update l:{[rs;cs;h;w]1000 sv flip (cross/)(rs;cs)+(til h;til w)}'[rs;cs;h;w] from claims
+1+where 1=count v:{[t;L]where any flip L in/: exec l from t}[claims] each claims[`l]
+claims:update ce:cs+w, re:rs+h from claims
+qI:{[x;t]t:0!(`id xkey t) _ x[`id];all (x[`ce]<t[`cs])|(t[`ce]<x[`cs])|(x[`re]<t[`rs])|(t[`re]<x[`rs])}
+1+where qI[;claims] each claims
+
+
+
+D4
+d:`d`t!(`date`time)$\:"Z"$16#'1_/:x:read0 `:d4.txt
+d[`s`id]:flip {$["p"=c:first x;(`w;0N);"s"=c;(`s;0N);(`w;"J"$first " " vs x)]} each 26_' x
+t:update d+1,t:00:00 from (update fills id,`minute$t from `d`t xasc flip d) where t>22:00
+p1
+gid:@[;`id]first 0!select[>a] sum a by id from update a:sum (deltas t)(where `w=s) by id,d from t
+
+tt:ungroup select t:`minute$til 60 by id,d from t
+prd first select 7h$t,id from `d`t`id xdesc select count d by id,t from aj[`id`d`t;tt;t] where s=`s
+
+
+p2
+prd first select 7h$t,id from `d`id xdesc select count d by t,id from T where s=`s
+
+
+
+D5
+raze read0 `:d5.txt
+p1
+d:(.Q.a,.Q.A)!(.Q.A,.Q.a)
+count {x where not 1h$@[k;;:;0]1+where 2=k:(x=d next x)+(x=d prev x)}/[x]
+
+p2
+f:{x where not 1h$@[k;;:;0]1+where 2=k:(x=d next x)+(x=d prev x)}
+\t min ('[count;f/]) each  x except/: .Q.a,'.Q.A
+
+
 D6
 c:flip "J"$ "," vs/: read0 `:d6.txt
 p1
@@ -7,18 +79,6 @@ p2
 sum 10000> {sum over abs c-x} each p
 
 D7
-/used views to solve dependency resolution
-d7:read0 `:d7.txt
-k:()!();i:0;k[i]:enlist[`];j:()
-t:0!select asc distinct d by r from flip `d`r!flip d7[;5 36]
-c:(asc `$string distinct (raze t[`d]) except t[`r]) set\: 1
-t:`d xasc t upsert (string[c],\:enlist[""])
-v:{x[0],"::",(";" sv string x[1]),";{i+::1;k[i]:x; j,::y;1}[`",("`" sv string x[1]),";`",x[0],"]"} each flip value flip select r, d from t
-value each v
-l:`$first t[`r] except raze t[`d]
-get l
-k
-
 p1
 d7:read0 `:d7.txt
 t:flip `d`r!flip `$string d7[;5 36]
