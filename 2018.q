@@ -107,50 +107,29 @@ g:.[f:{[x;c;m;M]
 		   }]
  sum last g over (d8;enlist[1];7h$();())
 p2
-g:.[f:{[x;c;m;M]
-	 $[0=count x;(x;c;m;M);
-	 	0=0^first[c]; (k _ x;@[1 _ c;0;-;1];1_m;(k:0^first[m])#x);
-	 	0=first x;((2+k)_x;@[c;0;-;1];m;sum (k:first 1_x)#2_x);
-		(2_x;first[x],c;(first 1_x),m;M)]
-		   }]
-s:1 _' (@[;3] each k) group count each @[;1] each k:g scan (2 3 1 1 0 2 7 8 1 1 1 0 1 99 2 1 1 2;enlist[1];7h$();())
-root:([]id:();c:();cc:();m:();p:();d:()) upsert (0;1;1;0;0;::)
-
 p:.[{[x;t]
 	/if we have exhausted the list
-	if[0=count x;:(x;t)];
+	$[0=count x;(x;t);
 	/if leaf
-	if[0=first x;:pL[x;t]]; 
+	 0=first x;pL[x;t]; 
 	/if there are nodes whose children have been exhausted
-	if[0<count select from t where cc=0,d~\:0N;:aD[x;t]];
+	 0<count select from t where cc=0,d~\:0N;:aD[x;t];[
 	/otherwise add the node to the table 
 	t:t upsert (max[t`id]+1;x[0];x[0];x[1];pp:max exec id from t where cc>0;0N);
-	:(2 _ x; t)
+	:(2 _ x; t)]]
 	}]
 /process leaf
 pL:{[x;t]((2+x[1]) _ x;update cc:cc-1 from (t upsert (max[t`id]+1;0;0;x[1];pp:max exec id from t where cc>0;x[1]# 2 _ x)) where id=pp)};
 aD:{[x;t]
-		k:last select m, id,p from t where cc=0, d~\:0N;
-		t:update d:enlist[k[`m]#x] from t where id=k[`id];
-		t:update cc:cc-1 from t where id=k[`p];
-		:(k[`m]_x;t)
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   k:last select m, id,p from t where cc=0, d~\:0N;
+   t:update d:enlist[k[`m]#x] from t where id=k[`id];
+   t:update cc:cc-1 from t where id=k[`p];
+   :(k[`m]_x;t)}
+root:([]id:();c:();cc:();m:();p:();d:()) upsert (0;1;1;0;0;::)
+t:last p over (d8;root)
+t:update l:c=0 from update v:sum each d from t where c=0
+sumup:{[t] t lj `id xkey select id, v:sum each vv@'d-1,l:1b from (select vv:v by id:p from t where (all;l) fby p) lj `id xkey t}
+sumup over t
 
 D9
 p1
