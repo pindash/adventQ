@@ -23,3 +23,24 @@ d:first read0 `:adventofcode/d4.txt
 r:string 125730+til neg value d
 p1:sum {(x~asc x)&(1<=sum not differ x)} each  r
 p2:sum {(x~asc x)&(1<=sum 2=count each group x)} each  r
+/day 5
+d:value first read0 `:adventofcode/d5.txt
+f:.[{[m;i]
+    em:01b!({x@y}[m];{x});
+    ins:last c:10 vs m i;
+    e:reverse "b"$-1_c;
+    g:{[em;e;m;i;s] em[e s]@'m[i+s]}[em;e;m;i];
+    $[99=m i;(m;i);
+    1=ins;(@[m;m[i+3];:;sum g 1 2];i+4);
+    2=ins;(@[m;m[i+3];:;prd g 1 2];i+4);
+    3=ins;(@[m;m[i+1];:;get `input];i+2);
+    4=ins;[res,::g 1;(m;i+2)];
+    5=ins;(m;$[g 1;g 2;i+3]);
+    6=ins;(m;$[not g 1;g 2;i+3]);
+    7=ins;(@[m;m[i+3];:;"j"$.[<] g 1 2];i+4);
+    8=ins;(@[m;m[i+3];:;"j"$.[=] g 1 2];i+4);
+    (m;i)]}]
+input:1;res:();f over (d;0)
+p1:$[all not -1 _ res;last res;'broken]
+input:5;res:();f over (d;0)
+p2:$[1=count res;res;'broken]
