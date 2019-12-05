@@ -18,3 +18,8 @@ allPoints:{[wp](1 2#0),raze flip each (-1_sums[enlist[0 0],wp])+
 wires:m[w[;;0]]*"I"$1 _''w:("," vs/: d)
 p1:@[;1] asc sum each abs {x[0] inter x[1]} allPoints each wires
 p2:@[;1] sum {x ?\: x[0] inter x[1]}  allPoints each wires
+/day 4
+d:"125730-579381"
+r:string 125730+til neg value d
+p1:sum {(x~asc x)&(1<=sum not differ x)} each  r
+p2:sum {(x~asc x)&(1<=sum 2=count each group x)} each  r
