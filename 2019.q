@@ -44,3 +44,8 @@ input:1;res:();f over (d;0)
 p1:$[all not -1 _ res;last res;'broken]
 input:5;res:();f over (d;0)
 p2:$[1=count res;res;'broken]
+/day 6
+d:read0 `:adventofcode/d6.txt
+p:.[!] reverse flip `COM,`$")" vs/: d
+p1:sum count each 1 _(p\) each value p
+p2:sum -1+n?\:first .[inter] n:(p\) each `YOU`SAN
