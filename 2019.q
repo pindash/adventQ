@@ -108,6 +108,10 @@ try2:{[ph]
     last .[`amps;(`a;`inp)]
     }
 p2:max try2 each 5+combos
+/day 8
+d:value each read0:`:adventofcode/d8.txt
+p1:{sum[2=x]*sum[1=x]}raze g j?min j:{sum sum x} each 0=g:{(div[count z;x*y];y;x)#z}[25;6;]d
+p2:(0 1!0N 1) last fills reverse (0 1 2!0 1 0N)g
 
 
 
