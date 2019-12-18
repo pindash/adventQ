@@ -113,5 +113,30 @@ d:value each read0:`:adventofcode/d8.txt
 p1:{sum[2=x]*sum[1=x]}raze g j?min j:{sum sum x} each 0=g:{(div[count z;x*y];y;x)#z}[25;6;]d
 p2:(0 1!0N 1) last fills reverse (0 1 2!0 1 0N)g
 
+/
 
+op:{[input;output;m;i;r]
+    em:0 1 2!({x@y}[m];{x};{x@y+z}[m;r]);
+    ins:last c:10 vs m i;
+    e:reverse -1_c;
+    g:{[em;e;m;i;s] 0^em[0^e s]@'m[i+s]}[em;e;m;i];
+    gw:{[e;i;r;s]?[2=0^e s;r+i+s;i+s]}[e;i;r];
+    $[99=m i;(m;i;r);
+    1=ins;(@[m;m[gw 3];:;sum g 1 2];i+4;r);
+    2=ins;(@[m;m[gw 3];:;prd g 1 2];i+4;r);
+    3=ins;(@[m;m[gw 1];:;input[]];i+2;r);
+    4=ins;[output g 1;(m;i+2;r)];
+    5=ins;(m;$[g 1;g 2;i+3];r);
+    6=ins;(m;$[not g 1;g 2;i+3];r);
+    7=ins;(@[m;m[gw 3];:;"j"$.[<] g 1 2];i+4;r);
+    8=ins;(@[m;m[gw 3];:;"j"$.[=] g 1 2];i+4;r);
+    9=ins;(m;i+2;r+g 1);
+    (m;i;r)]}
+k:til[10]!1+til 10
+input:{4}
+output:{res,::x}
+f:.[op[input;output]]
+k:{til[count x]!x} 109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99
+(f/)(k;0;0)
+\
 
