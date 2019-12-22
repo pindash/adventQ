@@ -136,6 +136,19 @@ output:{res,::x}
 k:{til[count x]!x} d
 p1:first over (res;(.[op[{1};output]]/)(k;0;0))
 p2:last first (res;(.[op[{2};output]]/)(k;0;0))
-
+/day 10
+d:read0 `:adventofcode/d10.txt
+sm:{([]row:where count each i;col:raze i;val:raze x@'i:where each x<>0)} /sparse.q
+f:{[t;r]count distinct select row%col,signum row, signum col from 
+   delete from (t-\:r) where row=0,col=0}
+t:delete val from sm ".#"?d
+p1:max a:(f[t] each t)
+degree:{[rise;run](?[0>run;2*atan[0w];0])+atan rise%run}
+dist:{sqrt (x*x)+(y*y)}
+t:(t-\:z:select col, row from t a?p1) _ a?p1
+t:update dist:dist[row;col], slope:degree[row;col] from t
+t:0!select row:row iasc dist, col:col iasc dist by slope from t  
+blast:{1 rotate update 1 _/:row, 1 _/:col from x where i=0}
+p2:100 sv value z+first select col,row from blast/[199;] t
 
 
