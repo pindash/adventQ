@@ -26,5 +26,6 @@ prd {sum .[x] each flip @[;1;mod;count first x]y*\:1+til count x}[i] each (1 1;1
 /p2
 prd {x:x where 0=mod[;y 0]til count x;sum x@' (y[1]*til count x) mod count first x}[i;] each (1 1;1 3;1 5;1 7;2 1)
 prd {j:@[y*\:1+til count x;1;mod;count first x];sum x[j 0]@'j 1}[i] each (1 1;1 3;1 5;1 7;2 1)
-
+/golfing
+prd {j:y*\:1+til count x;sum x[j 0]@'j[1] mod count first x}[i] each (1 1;1 3;1 5;1 7;2 1)
 
