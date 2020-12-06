@@ -51,3 +51,10 @@ max ids:{(8*2 sv "B"=7#x)+2 sv "R"=-3#x} each read0 `:d5.txt
 /p2
 {(m+til max[x]-m:min[x])except x} ids
 
+/day6
+i:read0 `:d6.txt
+i:enlist[""],i
+/p1
+sum (count distinct ::)each raze each (where 0=count each i)_i
+/p2
+sum {count (inter/) x} each 1_'(where 0=count each i)_i
