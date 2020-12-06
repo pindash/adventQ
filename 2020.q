@@ -45,3 +45,9 @@ m:`byr`iyr`eyr`hgt`hcl`ecl`pid`cid!({[x](4=count x) & ("I"$x) within 1920 2002};
     {[x] (`$x) in `amb`blu`brn`gry`grn`hzl`oth};
     {[x] (9=count x)&(all x in .Q.n)};{1b})
 sum {all m[key x]@' value x} each present 
+/day5
+/p1
+max ids:{(8*2 sv "B"=7#x)+2 sv "R"=-3#x} each read0 `:d5.txt
+/p2
+{(m+til max[x]-m:min[x])except x} ids
+
