@@ -50,6 +50,10 @@ sum {all m[key x]@' value x} each present
 max ids:{(8*2 sv "B"=7#x)+2 sv "R"=-3#x} each read0 `:d5.txt
 /p2
 {(m+til max[x]-m:min[x])except x} ids
+/second cut part 1:
+max 2 sv flip read0[`:d5.txt] in "BR"
+
+
 
 /day6
 i:read0 `:d6.txt
@@ -58,3 +62,7 @@ i:enlist[""],i
 sum (count distinct ::)each raze each (where 0=count each i)_i
 /p2
 sum {count (inter/) x} each 1_'(where 0=count each i)_i
+
+/same idea, but we can replace count each with match(~)
+sum (count distinct raze ::) each (where ""~/:i)_i
+sum (count(inter/)1_ ::) each (where ""~/:i)_i
