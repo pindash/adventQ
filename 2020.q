@@ -66,3 +66,17 @@ sum {count (inter/) x} each 1_'(where 0=count each i)_i
 /same idea, but we can replace count each with match(~)
 sum (count distinct raze ::) each (where ""~/:i)_i
 sum (count(inter/)1_ ::) each (where ""~/:i)_i
+
+/day7
+/day7
+i:read0 `:d7.txt
+t:ungroup {([]o:`$-1_'x[;0] inter\: .Q.a;p:"," vs/: x[;1])}"contain" vs/: i
+t:update c:0^"I"$'p[;1], p:`${?["s"=last each x;-1_'x;x]}p inter\: .Q.a from t
+/p1
+-1+count {distinct asc x,exec o from t where p in x } over `shinygoldbag
+/p2
+s:update totalbelow:0 from t where c=0
+f:{comp:exec o!1+totalbelow from x where not null totalbelow;
+   update totalbelow:7h$c wsum comp[p] by o from x
+    where ({all y in x}[key comp];p)fby o}
+exec first totalbelow from (f over s) where o=`shinygoldbag
