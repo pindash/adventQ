@@ -80,3 +80,15 @@ f:{comp:exec o!1+totalbelow from x where not null totalbelow;
    update totalbelow:7h$c wsum comp[p] by o from x
     where ({all y in x}[key comp];p)fby o}
 exec first totalbelow from (f over s) where o=`shinygoldbag
+
+/day8
+i:read0 `:d8.txt
+`ins`off set' {(`$x[;0];"I"$x[;1])}" " vs/: i
+visited:();acc:0;
+/p1
+{[i]if[i in visited;:acc]; visited,:i;$[`acc=c:ins i;{acc+:off x;x+1} i;`jmp=c;i+off i;`nop=c;i+1;0]}/[1000;0]
+/p2
+f:{if[x in v;:x];v,:x;$[`acc=c:ins x;{acc+:off x;x+1} x;`jmp=c;x+off x;`nop=c;x+1;x+0]}
+reset:{`v`acc`ins`off set'{(();0;`$x[;0];"I"$x[;1])}" " vs/: i}
+r[;0] where {count[ins] in/: x[;1]}r:{reset[];@[`ins;x;`jmp`nop!`nop`jmp];(acc;f scan 0)} each where ins in `jmp`nop
+
