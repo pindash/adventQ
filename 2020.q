@@ -92,3 +92,12 @@ f:{if[x in v;:x];v,:x;$[`acc=c:ins x;{acc+:off x;x+1} x;`jmp=c;x+off x;`nop=c;x+
 reset:{`v`acc`ins`off set'{(();0;`$x[;0];"I"$x[;1])}" " vs/: i}
 r[;0] where {count[ins] in/: x[;1]}r:{reset[];@[`ins;x;`jmp`nop!`nop`jmp];(acc;f scan 0)} each where ins in `jmp`nop
 
+/day 9
+i:"J"$read0 `:d9.txt
+/p1
+m:i first where 0=count each {y inter x-y}'[i;flip (1+til[25]) xprev\: i]
+/p2
+sum (min;max) @\: i {x[1]-til 1+x[0]}c vs last where raze m=sums til[c:count i]xprev\:i
+
+
+
