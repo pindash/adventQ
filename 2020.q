@@ -98,5 +98,13 @@ m:i first where 0=count each {y inter x-y}'[i;flip (1+til[25]) xprev\: i]
 /p2
 sum (min;max) @\: i {x[1]-til 1+x[0]}c vs last where raze m=sums til[c:count i]xprev\:i
 
+/day 10
+i:"J"$read0 `:d10.txt
+/p1
+prd count each group deltas asc[i],3+max i
+/p2
+trib:{7h$first {(1 1 1f;1 0 0f;0 1 0f)$x}/[0|x-1;(1 1 0f)]}
+prd (trib sum ::) each {(0,where 0=x)_x}1=deltas asc i
+
 
 
