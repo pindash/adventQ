@@ -109,4 +109,37 @@ trib:{7h$first {(1 1 1f;1 0 0f;0 1 0f)$x}/[0|x-1;(1 1 0f)]}
 prd (trib sum ::) each {(0,where 0=x)_x}1=deltas asc i
 
 
+/day 11
+i:read0 `:d11.txt
+/p1
+l:`int$"#"=i;f:not "."=i;
+adj:{f*(5>a)&x|0=a:2{flip (0i+':x)+1_x,0i}/x} 
+sum over adj over l
+/p2
+shape:{(count x;count first x)} i
+ts:1+{(til each x)@\:til max x} -1+shape
+/directions
+n:(neg ts[0];count[ts 1]#0);s:abs n;w:(count[ts 0]#0;neg ts 1);e:abs w;
+nw:neg ts;ne:@[nw;1;neg];sw:@[nw;0;neg];se:neg nw;
+chairs:where raze "L"=i;f:not "."=raze i;l:raze "#"=i
+d:{x!x}til max shape
+findN:{{first (shape sv x) inter chairs} each d (n;s;w;e;nw;ne;sw;se)+\:shape vs x}
+near:flip findN each til count l
+seat:{f*(5>a)&x|0=a:sum 0^x near}
+sum seat over l
+
+/alternative way of findig near nodes
+c:"L"=i
+d:{x!x}flip shape vs til count raze l 
+travel:{{$[.[x] z;z;2#d z+y]}[.[l;y;:;0b];x;] over y}
+alldir:(1_{x cross x}0 1 -1) travel\:
+n2:flip shape sv/: flip each alldir each flip shape vs til count raze c
+seat:{f*(5>a)&x|0=a:sum 0^x n2}
+sum seat over l
+
+/shakti:
+i:0:"d11.txt"
+l:"#"=i;f:~"."=i
+adj:{f*(5>a)&x|0=a:(2;{+(0+':x)+1_x,0})/:x}
++//:adj/:l
 
