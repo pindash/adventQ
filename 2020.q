@@ -137,6 +137,16 @@ n2:flip shape sv/: flip each alldir each flip shape vs til count raze c
 seat:{f*(5>a)&x|0=a:sum 0^x n2}
 sum seat over l
 
+/another way march the whole matrix/ way faster
+c:raze "L"=i;l:raze "#"=i;
+s:{(count x;count first x)} i
+d:{x!s sv flip x}flip s vs til prd s
+p:flip key d
+m:{{?[c y;y;d flip x+s vs y]}[x]/[d flip x+y]}
+n:(1_{x cross x}0 1 -1) m\: p
+seat:{c*(5>a)&x|0=a:sum 0^x n}
+sum seat over l
+
 /shakti:
 i:0:"d11.txt"
 l:"#"=i;f:~"."=i
