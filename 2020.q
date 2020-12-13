@@ -168,3 +168,50 @@ m:`S`E`W`N`F`R`L!(@[;2;-;];@[;3;+;];@[;3;-;];@[;2;+;];{@[x;0 1;+;x[2 3]*y]};
 f:{m[y 0][x;y 1]}
 sum abs 2#f/[(0;0;1;10);i]
 
+/day 13
+i:read0 `:d13.txt
+t:"J"$first i;k:{x where not null x}"J"$"," vs last i
+/p1
+prd {(min[x]-t;k first iasc x)}{{x+y}[;x]/[{x<t};0]} each k
+/p2
+k:"J"$"," vs last i
+/key incite https://math.stackexchange.com/a/3864593
+/large number multiplication under modulus
+bigmodmul:{[a;b;m]
+	a:a mod m;
+	f:{if[x[`b] mod 2;x[`r]:(x[`r]+x[`a]) mod x[`m]];
+	  x[`a]:(2*x[`a]) mod x[`m];x[`b]:x[`b] div 2;
+	  x};
+	x:f/[{x[`b]>0};`a`b`r`m!(a mod m;b;0;m)];
+	x[`r]}
+/extended_gcd
+egcd:{[a;b]
+ x:`r0`r`s0`s`t0`t!(a;b;1;0;0;1);
+ f:{q:x[`r0] div x[`r];r:x[`r0] mod x[`r];
+    x[`r0`r]:(x[`r];r);x[`s0`s]:(x[`s];x[`s0]-q*x[`s]);
+    x[`t0`t]:(x[`t];x[`t0]-q*x[`t]);
+	x};
+ res:f/[{0<>x[`r]};x];
+ res[`r0`s0`t0]}
+/combined phased rotations
+cpr:{[a;ap;b;bp]
+ x:()!();x[`gcd`s`t]:egcd[a;b];
+ pd:ap-bp;pdm:pd div x[`gcd];pdr:pd mod x[`gcd];
+ if[pdr;'rotation_reference_points_never_sync];
+ cp:b*a div x[`gcd];
+ ch:(ap-x[`s]*bigmodmul[pdm;a;cp]) mod cp;
+ (cp;ch)};
+F:{cpr[x 0;x[1] mod x[0];y[0];y 1 mod y 0]}
+last F/[flip (k where not null k;neg where not null k)]
+/test
+t:((17,0N,13,19;3417);(67,7,59,61;754018);(67,0N,7,59,61;779210);(67,7,0N,59,61;1261476);(1789,37,47,1889;1202161486))
+{k:first x;last[x]=last F/[flip (k where not null k;where not null k)]} each t
+/alternative 
+fa:{[a;ao;b;bo]
+  x:cpr[a;neg[ao] mod a;b;neg[bo] mod b];
+  (x 0;neg[x 1] mod x 0)}
+G:{fa[x 0;x 1;y 0;y 1]}
+last G/[flip (k where not null k;neg where not null k)]
+
+
+
