@@ -184,6 +184,11 @@ bigmodmul:{[a;b;m]
 	  x};
 	x:f/[{x[`b]>0};`a`b`r`m!(a mod m;b;0;m)];
 	x[`r]}
+/bigmodmul kdb way:
+bmmod:{[a;b;m]
+	a:a mod m;l:reverse 2 vs b;
+  a:(mod[;m] 2*)\[count l;a];
+  {mod[;x]y+z}[m] over a where l}
 /extended_gcd
 egcd:{[a;b]
  x:`r0`r`s0`s`t0`t!(a;b;1;0;0;1);
@@ -199,7 +204,7 @@ cpr:{[a;ap;b;bp]
  pd:ap-bp;pdm:pd div x[`gcd];pdr:pd mod x[`gcd];
  if[pdr;'rotation_reference_points_never_sync];
  cp:b*a div x[`gcd];
- ch:(ap-x[`s]*bigmodmul[pdm;a;cp]) mod cp;
+ ch:(ap-x[`s]*bmmod[pdm;a;cp]) mod cp;
  (cp;ch)};
 F:{cpr[x 0;x[1] mod x[0];y[0];y 1 mod y 0]}
 last F/[flip (k where not null k;neg where not null k)]
