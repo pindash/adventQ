@@ -219,4 +219,16 @@ G:{fa[x 0;x 1;y 0;y 1]}
 last G/[flip (k where not null k;neg where not null k)]
 
 
+/day 14
+i:read0 `:d14.txt
+p:?["a"=i[;1];"J"$''-36#'i;{"J"$x (where 1<deltas c)_c:where x in .Q.n} each i]
+/p1
+d:()!();g:{if[36=count y;:y];d[y 0]:2 sv (-36#0b vs y[1])^x;x}
+g over p;sum d
+/p2
+d:(`long$())!`long$();
+f:{y:?[c:null x;x;(-36#0b vs y)|x];2 sv flip @[y;where c;:;] each flip 2 vs til (2*)/[7h$sum c;1]}
+g:{if[36=count y;:y];d[f[x;y 0]]:y[1];x}
+g over p; sum d
+
 
