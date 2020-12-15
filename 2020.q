@@ -259,7 +259,10 @@ N:30000000;j:N#0N;j[i]:til c:count i;c-:1
 f:{l:0|c-j x;j[x]:c;c+:1;l}
 f/[N-count i;last i]
 
-
-
+/arthur's solution
+f:{l:a x;a[x]:y;0|y-l}
+a:n#n:30000000
+a[i]:til count i
+\t r:last[i] f/-1+(count i)_til n
 
 
