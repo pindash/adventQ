@@ -232,3 +232,34 @@ g:{if[36=count y;:y];d[f[x;y 0]]:y[1];x}
 g over p; sum d
 
 
+/day 15
+i:value first read0 `:d15.txt
+/p1
+last {x,0^-1+count[x]-{last where x=y}[-1 _ x;last[x]]}/[2020-count i;i] //naive
+/p2
+d:(`u#-1 _ i)!til c:-1+count i;l:last i;  /dictionary with unique values
+f:{(@[x;y 0;:;y 1];(0^y[1]-x y 0;1+y 1))}/
+\ts r:f/[30000000-count i;(`d;l,c)]
+654 4719648
+
+/using array to do look ups
+N:30000000
+k:@[N#0N;-1 _ i;:;til c:-1+count i];l:last i;
+f:{(@[x;y 0;:;y 1];(0^y[1]-x y 0;1+y 1))}/
+\ts r:first last f/[N-count i;(`k;l,c)]
+
+
+/andras shakti slightly faster
+i:0 3 6
+N:30000000;j:N#0N;j[i]:!#i;c:-1+#i
+f:{l:0|c-j x;j[x]:c;c+:1;l}
+\t (N-#i;f)/:*|i
+
+N:30000000;j:N#0N;j[i]:til c:count i;c-:1
+f:{l:0|c-j x;j[x]:c;c+:1;l}
+f/[N-count i;last i]
+
+
+
+
+
