@@ -266,3 +266,35 @@ a[i]:til count i
 \t r:last[i] f/-1+(count i)_til n
 
 
+/day 16
+i:read0 `:d16.txt
+`r`mt`nt set'(0,where 0=count each i)_i
+r1:"J"$"-" vs/:/: "or" vs/: .[;(::;1)]":" vs/: r
+t:"J"$"," vs/: 2 _ nt
+/p1
+sum raze v:{x where all x {not any x within/: y}/: r1} each t
+/p2
+v:t where 0=count each v
+p:where each all {x {any x within/: y}/:\: r1} each v
+solve:{[r;m] r[c]:first m first c:where 1=count each m; (r;m except\: r)}/ 
+m:first solve/[20;(20#0N;p)]
+prd value[last mt] m?where r like "*departure*"
+/shorter and faster
+p:where each (all any ::) each v within/:/: r1
+m:(raze (except':) p c)iasc c:iasc count each p
+prd value[last mt] m where r like "*departure*"
+
+/shakti
+X:{0:"./advent/2020/d",($x),".txt"};Y:" "\'X@
+/day 16
+i:{(0,&0=#'x)^x}X 16
+r:{0 1+/:x}'{(`i$"-"\'" "\x)[1 3]}'(":"\' i 0)[;1]
+t:`i$","\' 2_i 2
+/p1
++/,/v:t@'(&&/&/~+)'t within/:/:\: r
+/p2
+t@:&0=#'v;p:&'(&/|/)'t within/:/: r
+m:(,/{y_x}':p c)@<c:<#'p
+*/(`i$","\last[i 1])m@&&/+"departure" in/: (i 0)
+
+
