@@ -297,4 +297,121 @@ t@:&0=#'v;p:&'(&/|/)'t within/:/: r
 m:(,/{y_x}':p c)@<c:<#'p
 */(`i$","\last[i 1])m@&&/+"departure" in/: (i 0)
 
+/day 17
+i:"#"=read0 `:d17.txt
+tile:{(3*(count x;count x 0))#raze over flip each 3 3#@[9#enlist 0b&x;4;:;x]}
+ad:{@[13#enlist 0b&x;6;:;x]}
+life:{3=a-x*4=a:3{flip flip each (0i+':x)+1_x,0i}/x}
+sum over 6 life/ ad tile i
+/p2
+life:{3=a-x*4=a:4{flip (flip') (flip'') (0i+':x)+1_x,0i}/x}
+sum over 6 life/ ad ad tile i 
+
+
+/more generally for n dimension
+shape:{-1_ count each first\[{0<=type x};x]}
+dim:count shape ::
+transpose:{f:('[;]/)({y[x]}\)flip,(dim[x]-2)#(each);f x}
+life:{3=a-x*4=a:dim[x]{transpose (0i+':x)+1_x,0i}/x}
+sum over 6 life/ ad ad ad tile i 
+
+
+
+/day 18
+i:read0 `:d18.txt
+/p1
+sum {value x^(")("!"()") x:reverse x} each i
+/p2
+paren:(sums("()"!1 -1)::);ins:{raze ((y)#x;z;y _ x)};
+p:{max(y&where z=x)except y};n:{min(y|where z=x)except y};
+pb:{y:y-2;$[x[y] in .Q.n;p[x;y;" "];p[c;y;(c:paren[x]) y]]};
+nb:{y:y+2;$[x[y] in .Q.n;n[x;y;" "];n[c;y;+(c:paren x)y-1]]};
+f:{x:{" ",x," "}x^(")("!"()") x:reverse x;
+	 k:pb[x] each where "+"=x;j:nb[x] each where "+"=x;
+	 kp:asc raze count[k]#enlist "()";i:idesc (k:k,j);
+   value ins/[x;k i;kp i]}
+sum f each i
+
+/day 19
+`r``m set' (raze 0,0 1+/:where ""~/:i) _  i:read0 `:d19.txt
+r:":" vs/: r;d:("J"$r[;0])!(value'') "|" vs/: r[;1]
+c:where 10=type each d;a:c!`$d c
+/p1
+flatten:{raze `$(raze'')string (cross/') x}
+uprule:{k:(where(all/')(key[x]_d) in key[x])#d;`K set k;
+  $[any c:(all')1=(count'') k;x,raze each x where[c]#k;x,flatten each x k]}
+rr:uprule over a
+sum (`$m) in rr 0 
+/p2 -- Inspired by András Dőtsch
+r:?[7=type each r2;(enlist'')r2;r2:d[asc key d]]
+m:{$[0=count x;0=c:count y;0=c;0b;-10=type f:x 0;$[f=y 0;m[1_x;1_y];0b];any m[;y]'[r[f],\:1_x]]}
+sum m[raze r 0] peach i
+/ part 2
+r[8]:((),42;42 8);r[11]:(42 31;42 11 31)
+sum m[raze r 0] peach i
+
+/day 20
+m:1 _' (where ""~/:i) cut i: enlist[""], read0 `:d20.txt
+t:raze value each -1 _' 5 _' m[;0];m:"#"= -1 _ 1 _' m;
+f:{2 sv 7h$flip (first x;last flip x;reverse last x;first flip reverse x)}
+N:{(f x;f flip x)} each m
+/p1
+prd t where any each 2=(sum'') N in where 1=count each group raze over N
+/p2
+/c - corners; s solution matrix 12 by 12 by 3 tupple (tile;border set;orientation)
+c:where any each 2=(sum'') N in where 1=count each group raze over N
+s:(2#7h$sqrt count m)#enlist 3# 0N
+/helpers
+/fr-find rotate;im-index map;gP-get possible matches;ot-get oriention from tupple
+/gB-get Border matches;gT-get Tile;dis - distinct sides (for border pieces) 
+O:(0 1 2 3;1 2 3 0;2 3 0 1;3 0 1 2;3 2 1 0;2 1 0 3;1 0 3 2;0 3 2 1)
+fr:{first where y~/:x[O]@\: z};ot:{(N . 2#x) O x 2};
+im:{x!flip 12 vs x}til count raze s[;;0]; 
+dis:{x inter where 1=count each group raze over N}
+gP:{raze where each flip(any'')N in x};gB:{gP where 1=count each group(raze/[N])except 0N};
+gT:{c:(first z inter where ::)each flip(any flip ::)each N in ot[x]y;i:first where not null c;(c[i],i)}
+/Tile # Orientation NESW
+g:{[s]if[all not null raze s[;;0];:s];
+ c:(n:(0 -1;-1 0)+\:(k:im first where null d:raze s[;;0])) in im; 
+ p:$[all c;gP[ot[s . n 0] 1];gB[]] except d;
+ t:gT[s . n l;1 2 l:last where c;p];
+ wn:(),$[c 0;ot[s . n 0] 1;dis[N . t]];
+ nn:(),$[c 1;ot[s . n 1] 2;dis[N . t]];
+ o:{min x where not null x}fr[N . t;;3 0] each $[2<>count wn;wn,/:nn;wn,\:nn];
+ .[s;k;:;t,o]}
+/first tile
+s[0;0]:c[0],0,fr[N[c 0;0];dis[N[c 0;0]];0 3]
+sol:g over s
+r:{flip reverse each x}
+tflip:(`s#0 4!({x};flip))
+to:{x[2] r/ tflip[x 2] tflip[4*x 1]m x 0}
+/draw to check
+raze each raze flip each (".#")(to'') sol
+/peel borders off and draw
+pm:{x[1+til 8;1+til 8]} each m
+tp:{x[2] r/ tflip[x 2] tflip[4*x 1]pm x 0}
+I:raze each raze flip each (tp'') sol
+sm:"#"=("                  # ";"#    ##    ##    ###";" #  #  #  #  #  #   ")
+smi:(cross/)(til count sm; til count first sm)
+conv:smi +\:/: flip count[I] vs til count raze I
+fsm:{sum sum[raze sm]= sum raze[sm] * flip x ./:/: conv}
+min sum/[I]-sum[raze sm]*fsm each IS:raze r\[3;] each (I;flip I)
+
+
+/day 21 
+i:read0 `:d21.txt
+m:"contains" vs/: i;ing:`$m[;0];al:m[;1];ing2:`$-1 _' " " vs/: string ing;
+al:`$", " vs/: 1 _' -1 _' al;t:([]al;ing);
+t:update id:i from ungroup t
+t:ungroup update ing:`$-1 _' " " vs/: string ing from t
+tt:select ing by al, id from t
+kk:exec (inter/) ing by al from tt
+/p1
+count raze[ing2] except distinct raze kk
+/p2
+M:()!();f:{M[k]:v:x k:first where 1=count each x;x except\: v}
+f over kk;
+"," sv string raze {asc[key x]#x} M
+
+
 
