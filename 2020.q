@@ -415,3 +415,69 @@ f over kk;
 
 
 
+
+/day 22
+`p1`p2 set' (0,where""~/:i) cut i:read0 `:d22.txt
+p1:value each 1 _ p1;p2:value each 2 _ p2
+/p1
+play:{if[any 0=count each (x;y);:(x;y)];c:x 0;d:y 0;x:1 _ x;y:1 _ y;$[c>d;(x,c,d;y);(x;y,d,c)]}/
+max {sum x*reverse 1+til count x} each play over (p1;p2)
+/p2
+seen:{[a;b;g]any (a;b) in' HG[g]}
+add:{[a;b;g]$[g in key HG;HG[g]:HG[g],'(enlist a;enlist b);HG[g]:(enlist[a];enlist[b])]}
+game:.[{[w;a;b;r;g]
+  if[any 0=count each (a;b);:(count[a]>count[b];a;b;r;g)] /if empty deck
+  if[seen[a;b;g];:(1;a;b;r;g)]; /no infinite loops
+	add[a;b;g]; /add game as seen
+  `G set G|g;
+	/show "-- Game: (",string[g],") --";
+  /show "-- Round (",string[r],")  --";
+  /show "p1's deck: ", "," sv string a;
+  /show "p2's deck: ", "," sv string b;
+	c:a 0;d:b 0;a:1 _ a;b:1 _ b; /draw cards
+  /show "p1 drew: ",string c;
+  /show "p2 drew: ",string d;
+  recur:(c<=count a)&(d<=count b);
+  /if[recur;show "Playing a sub-game to determine the winner..."];
+  w:$[recur;first game over (0N;c#a;d#b;1;1+max G);c>d];
+  $[w;(w;a,c,d;b;r+1;g);(w;a;b,d,c;r+1;g)]}]
+
+G:0;HG:()!()
+res:game over (0N;p1;p2;1;1)
+{x wsum reverse 1+til count x} res 2
+
+
+/day 23
+i:first "J"$string read0 `:d23.txt
+i: 3 8 9 1 2 5 4 6 7 /sample
+/p1
+step:{
+	k:x[1 2 3];l:x[4];
+	p:x except k;
+  a:max[p]^{x x bin y}[asc[p];-1 + x 0];
+  j:1+p?a;x:k,j rotate p;
+  ?[x;l] rotate x}
+1 _ raze string {(x?1)rotate x}step/[100;i]
+/test p1 with p2 version
+V:(flip 1 _ 4 rotate[-1;]\ asc i)!asc i 
+t:([]v:`g#i;p:(1+til count i) mod count[i])
+c:0
+\t s2/[100;`t]
+1 _ raze string {(x?1)rotate x} `t[`v] (count[i]-1) {(x y)`p}[`t]\ c
+/p2
+/improve performance of p1 by factor of 1000
+j:i,10 _ til 1000001
+V:(flip 1 _ 4 rotate[-1;]\ asc j)!asc j
+dest:{first (V bin x) except y}
+s2:{k:x 4 {(x y)`p}[x]\ c;
+  kk:last k`v;k:-1 _ k;
+  l:dest[first k`v;k`v];
+  update p:last k`p from x where v=first k`v;
+  r:first exec p from x where v=l;
+  update p:r from x where v in last k`v;
+  update p:first k`p from x where v=l;
+  `c set (x`v)?kk;x}
+\t t:([]v:`g#j;p:(1+til count j) mod count[j]);c:0;s2/[10000000;`t]
+{prd x 1 2+x?1} `t[`v](count[j]-1) {(x y)`p}[t]\ c
+
+
