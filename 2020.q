@@ -481,3 +481,24 @@ s2:{k:x 4 {(x y)`p}[x]\ c;
 {prd x 1 2+x?1} `t[`v](count[j]-1) {(x y)`p}[t]\ c
 
 
+/day 24
+i:read0 `:d24.txt
+d:{(distinct 0,where any "ns"=\:x) cut x} each i
+d:{(raze/)`$/:/:{$[x[0] in "ew";x;(#[2;x];1 cut 2 _ x)]} each x} each d
+m:`sw`se`ne`nw`e`w!(-1 -1;-1 1;1 1;1 -1;0 2;0 -2)
+/p1
+sum b:{x mod 2}count each group sum each m d 
+/p2
+t:where b
+t:(110+abs min[t])+/:t
+M:.[;;:;1b]/[(ind:110+max[t])#0b;t]
+im:{x!flip ind vs x} til count raze M
+nn:im?flip each flip[value[im]]+/:value m
+sum {a:sum x nn;(x&a in 1 2)|(not[x]&a=2)}/[100;raze M]
+/display evolution
+f:{" #"ind#{a:sum x nn;(x&a in 1 2)|(not[x]&a=2)}/[x;raze M]}
+/f 95
+
+
+
+
