@@ -494,7 +494,7 @@ t:(110+abs min[t])+/:t
 M:.[;;:;1b]/[(ind:110+max[t])#0b;t]
 im:{x!flip ind vs x} til count raze M
 nn:im?flip each flip[value[im]]+/:value m
-sum {a:sum x nn;(x&a in 1 2)|(not[x]&a=2)}/[100;raze M]
+sum {(a=2)|2=x+a:sum x nn}/[100;raze M]
 /display evolution
 f:{" #"ind#{a:sum x nn;(x&a in 1 2)|(not[x]&a=2)}/[x;raze M]}
 /f 95
