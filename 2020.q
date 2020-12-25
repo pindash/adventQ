@@ -499,6 +499,10 @@ sum {(a=2)|2=x+a:sum x nn}/[100;raze M]
 f:{" #"ind#{a:sum x nn;(x&a in 1 2)|(not[x]&a=2)}/[x;raze M]}
 /f 95
 
-
+/day 25
+i:first ((),"J";",") 0:  `:d25.txt
+m:mod[;20201227];loop:{m x*y};
+l:(first where ::) each i=\:loop[7]\[1000000;1]
+{loop[i not x]/[l x;1]}first where not null l
 
 
